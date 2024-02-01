@@ -98,34 +98,51 @@ CREATE OR REPLACE PACKAGE BODY AMA_BRANCH_API AS
 
   --GET REMAINING CAPACITY
   FUNCTION GET_REMAINING_CAPACITY(Branch_Id_ IN NUMBER) RETURN NUMBER IS
-    total_capacity_     NUMBER;
-    occupied_capacity_  NUMBER;
-    remaining_capacity_ NUMBER;
-  
-    CURSOR occupied_capacity_cursor IS
-      SELECT SUM(Current_Volume)
-        FROM AMA_CONTAINER_TAB
-       WHERE Branch_Id = Branch_Id_;
+    result_ NUMBER;
   
   BEGIN
-    -- Use existing function to get total capacity of the branch
-    total_capacity_ := GET_TOTAL_WAREHOUSE_CAPACITY(Branch_Id_);
+    SELECT ((SELECT Total_Warehouse_Capacity
+               FROM AMA_BRANCH_TAB
+              WHERE Branch_Id = Branch_Id_) -
+           COALESCE((SELECT SUM(Max_Volume)
+                       FROM AMA_CONTAINER_TAB
+                      WHERE Container_Id IN
+                            (SELECT Container_Id
+                               FROM AMA_STORAGE_TAB
+                              WHERE Status = 'Active' AND
+                                    Branch_Id = Branch_Id_)),
+                     0))
+      INTO result_
+      FROM dual;
   
-    -- Declare a cursor to fetch the count of containers in the branch
-    OPEN occupied_capacity_cursor;
-    FETCH occupied_capacity_cursor
-      INTO occupied_capacity_;
-    CLOSE occupied_capacity_cursor;
-  
-    -- Calculate remaining capacity
-    remaining_capacity_ := total_capacity_ - occupied_capacity_;
-    RETURN remaining_capacity_;
+    RETURN result_;
   
   EXCEPTION
     WHEN NO_DATA_FOUND THEN
       RETURN NULL;
     
   END GET_REMAINING_CAPACITY;
+
+  -- get current inventory info
+  PROCEDURE GET_CURRENT_INV_INFO(Branch_Id_ IN NUMBER) IS
+    available_qty_ NUMBER;
+    item_id_       NUMBER;
+  BEGIN
+    FOR inv_info_rec IN (SELECT Available_Qty_KG, Item_Id
+                           FROM AMA_ITEMS_TAB
+                          WHERE Item_Id IN
+                                (SELECT Item_Id
+                                   FROM AMA_BRANCH_TAB
+                                  WHERE Branch_Id = Branch_Id_)) LOOP
+      -- Display information for each record
+      available_qty_ := inv_info_rec.Available_Qty_KG;
+      item_id_       := inv_info_rec.Item_Id;
+    
+      dbms_output.put_line('Available Quantity: ' || available_qty_ ||
+                           ', Item ID: ' || item_id_);
+    END LOOP;
+  
+  END GET_CURRENT_INV_INFO;
 
   -- To update record
   PROCEDURE update_record(Branch_Id_                    IN NUMBER,

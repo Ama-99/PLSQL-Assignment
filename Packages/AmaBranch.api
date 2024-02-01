@@ -5,6 +5,8 @@ CREATE OR REPLACE PACKAGE AMA_BRANCH_API AS
                           Total_Warehouse_capacity_ IN NUMBER,
                           Company_Reg_No_           IN NUMBER,
                           Container_Id_             IN NUMBER);
+                          
+  PROCEDURE GET_CURRENT_INV_INFO(Branch_Id_ IN NUMBER);
 
   FUNCTION GET_BRANCH_NAME(Branch_Id_ IN NUMBER) RETURN VARCHAR2;
 
