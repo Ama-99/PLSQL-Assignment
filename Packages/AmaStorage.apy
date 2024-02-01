@@ -1,61 +1,33 @@
 CREATE OR REPLACE PACKAGE BODY AMA_STORAGE_API AS
-   PROCEDURE INSERT_STORAGE(
-      Storage_Id_ IN VARCHAR2,
-      Container_Id_ IN NUMBER,
-      Item_Id_ IN VARCHAR2,
-      Status_ IN VARCHAR2
-   ) IS
-   BEGIN
-      INSERT INTO AMA_STORAGE_TAB (
-         Storage_Id,
-         Container_Id,
-         Item_Id,
-         Status
-      )
-      VALUES (
-         Storage_Id_,
-         Container_Id_,
-         Item_Id_,
-         Status_
-      );
-   END INSERT_STORAGE;
-
-   --CUD ops
-   PROCEDURE create_new_record(
-    Storage_Id_ IN VARCHAR2,
-    Item_Id_ IN VARCHAR2,
-    Container_Id_ IN NUMBER,
-    Branch_Id_ IN NUMBER,
-    Status_ IN VARCHAR2
-  ) IS
+  PROCEDURE INSERT_STORAGE(Storage_Id_   IN VARCHAR2,
+                           Container_Id_ IN NUMBER,
+                           Item_Id_      IN VARCHAR2,
+                           Status_       IN VARCHAR2) IS
   BEGIN
-    INSERT INTO AMA_STORAGE_TAB (Storage_Id, Item_Id, Container_Id, Branch_Id, Status)
-    VALUES (Storage_Id_, Item_Id_, Container_Id_, Branch_Id_, Status_);
-  END create_new_record;
+    INSERT INTO AMA_STORAGE_TAB
+      (Storage_Id, Container_Id, Item_Id, Status)
+    VALUES
+      (Storage_Id_, Container_Id_, Item_Id_, Status_);
+  END INSERT_STORAGE;
 
-  PROCEDURE update_record(
-    Storage_Id_ IN VARCHAR2,
-    New_Item_Id_ IN VARCHAR2,
-    New_Container_Id_ IN NUMBER,
-    New_Branch_Id_ IN NUMBER,
-    New_Status_ IN VARCHAR2
-  ) IS
+  PROCEDURE update_record(Storage_Id_       IN VARCHAR2,
+                          New_Item_Id_      IN VARCHAR2,
+                          New_Container_Id_ IN NUMBER,
+                          New_Branch_Id_    IN NUMBER,
+                          New_Status_       IN VARCHAR2) IS
   BEGIN
     UPDATE AMA_STORAGE_TAB
-    SET 
-      Item_Id = New_Item_Id_,
-      Container_Id = New_Container_Id_,
-      Branch_Id = New_Branch_Id_,
-      Status = New_Status_
-    WHERE Storage_Id = Storage_Id_;
+       SET Item_Id      = New_Item_Id_,
+           Container_Id = New_Container_Id_,
+           Branch_Id    = New_Branch_Id_,
+           Status       = New_Status_
+     WHERE Storage_Id = Storage_Id_;
   END update_record;
 
   PROCEDURE delete_record(Storage_Id_ IN VARCHAR2) IS
   BEGIN
-    DELETE FROM AMA_STORAGE_TAB
-    WHERE Storage_Id = Storage_Id_;
+    DELETE FROM AMA_STORAGE_TAB WHERE Storage_Id = Storage_Id_;
   END delete_record;
-
 
 END AMA_STORAGE_API;
 /

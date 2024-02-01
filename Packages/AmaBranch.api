@@ -1,46 +1,30 @@
 CREATE OR REPLACE PACKAGE AMA_BRANCH_API AS
-   PROCEDURE INSERT_BRANCH(
-      Branch_Name_ IN VARCHAR2,
-      Branch_Address_ IN VARCHAR2,
-      Branch_Manager_ IN VARCHAR2,
-      Total_Warehouse_capacity_ IN NUMBER,
-      Company_Reg_No_ IN NUMBER,
-      Container_Id_ IN NUMBER
-   );
-   
-   FUNCTION GET_BRANCH_NAME(Branch_Id_ IN NUMBER) RETURN VARCHAR2;
-   
-   FUNCTION GET_BRANCH_ADDRESS(Branch_Id_ IN NUMBER) RETURN VARCHAR2;
-   
-   FUNCTION GET_BRANCH_MANAGER(Branch_Id_ IN NUMBER) RETURN VARCHAR2;
-   
-   FUNCTION GET_TOTAL_WAREHOUSE_CAPACITY(Branch_Id_ IN NUMBER) RETURN NUMBER;
-   
-   FUNCTION GET_REMAINING_CAPACITY(Branch_Id_  IN NUMBER) RETURN NUMBER;
+  PROCEDURE INSERT_BRANCH(Branch_Name_              IN VARCHAR2,
+                          Branch_Address_           IN VARCHAR2,
+                          Branch_Manager_           IN VARCHAR2,
+                          Total_Warehouse_capacity_ IN NUMBER,
+                          Company_Reg_No_           IN NUMBER,
+                          Container_Id_             IN NUMBER);
 
-   --CUD ops
+  FUNCTION GET_BRANCH_NAME(Branch_Id_ IN NUMBER) RETURN VARCHAR2;
 
-   PROCEDURE create_new_record(
-    Branch_Id_ IN NUMBER,
-    Branch_Name_ IN VARCHAR2,
-    Branch_Address_ IN VARCHAR2,
-    Branch_Manager_ IN VARCHAR2,
-    Total_Warehouse_Capacity_ IN NUMBER,
-    Company_Reg_No_ IN NUMBER,
-    Container_Id_ IN NUMBER
-  );
+  FUNCTION GET_BRANCH_ADDRESS(Branch_Id_ IN NUMBER) RETURN VARCHAR2;
 
-  PROCEDURE update_record(
-    Branch_Id_ IN NUMBER,
-    New_Branch_Name_ IN VARCHAR2,
-    New_Branch_Address_ IN VARCHAR2,
-    New_Branch_Manager_ IN VARCHAR2,
-    New_Total_Warehouse_Capacity_ IN NUMBER,
-    New_Company_Reg_No_ IN NUMBER,
-    New_Container_Id_ IN NUMBER
-  );
+  FUNCTION GET_BRANCH_MANAGER(Branch_Id_ IN NUMBER) RETURN VARCHAR2;
+
+  FUNCTION GET_TOTAL_WAREHOUSE_CAPACITY(Branch_Id_ IN NUMBER) RETURN NUMBER;
+
+  FUNCTION GET_REMAINING_CAPACITY(Branch_Id_ IN NUMBER) RETURN NUMBER;
+
+  PROCEDURE update_record(Branch_Id_                    IN NUMBER,
+                          New_Branch_Name_              IN VARCHAR2,
+                          New_Branch_Address_           IN VARCHAR2,
+                          New_Branch_Manager_           IN VARCHAR2,
+                          New_Total_Warehouse_Capacity_ IN NUMBER,
+                          New_Company_Reg_No_           IN NUMBER,
+                          New_Container_Id_             IN NUMBER);
 
   PROCEDURE delete_record(Branch_Id_ IN NUMBER);
-   
+
 END AMA_BRANCH_API;
 /

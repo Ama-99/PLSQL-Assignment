@@ -1,182 +1,149 @@
 CREATE OR REPLACE PACKAGE BODY AMA_BRANCH_API AS
-   PROCEDURE INSERT_BRANCH(
-      Branch_Name_ IN VARCHAR2,
-      Branch_Address_ IN VARCHAR2,
-      Branch_Manager_ IN VARCHAR2,
-      Total_Warehouse_capacity_ IN NUMBER,
-      Company_Reg_No_ IN NUMBER,
-      Container_Id_ IN NUMBER
-   ) IS
-	Branch_Id_ NUMBER;
-   BEGIN
-      SELECT BRANCH_SEQ.NEXTVAL INTO Branch_Id_ FROM DUAL;
-      INSERT INTO AMA_BRANCH_TAB (
-         Branch_Id,
-         Branch_Name,
-         Branch_Address,
-         Branch_Manager,
-         Total_Warehouse_capacity,
-         Company_Reg_No,
-         Container_Id
-      )
-      VALUES (
-         Branch_Id_,
-         Branch_Name_,
-         Branch_Address_,
-         Branch_Manager_,
-         Total_Warehouse_capacity_,
-         Company_Reg_No_,
-         Container_Id_
-      );
-   END INSERT_BRANCH;
-   
-   --Get Branch Name
-   FUNCTION GET_BRANCH_NAME(Branch_Id_ IN NUMBER) RETURN VARCHAR2 IS
-        result_ VARCHAR2(200);
-             
-        CURSOR get_branch_name IS 
-            SELECT Branch_Name
-            FROM AMA_BRANCH_TAB
-            WHERE Branch_Id = Branch_Id_;   
-    BEGIN
-        OPEN get_branch_name;
-        FETCH get_branch_name INTO result_;
-        CLOSE get_branch_name;
-        
-        RETURN result_;
-        
-    END GET_BRANCH_NAME;
-    
-    --Get Branch address
-    FUNCTION GET_BRANCH_ADDRESS(Branch_Id_ IN NUMBER) RETURN VARCHAR2 IS
-        result_ VARCHAR2(4000);
-             
-        CURSOR get_branch_address IS 
-            SELECT Branch_Address
-            FROM AMA_BRANCH_TAB
-            WHERE Branch_Id = Branch_Id_;   
-    BEGIN
-        OPEN get_branch_address;
-        FETCH get_branch_address INTO result_;
-        CLOSE get_branch_address;
-        
-        RETURN result_;
-        
-    END GET_BRANCH_ADDRESS;
-    
-    --Get Branch Manager
-    FUNCTION GET_BRANCH_MANAGER(Branch_Id_ IN NUMBER) RETURN VARCHAR2 IS
-        result_ VARCHAR2(4000);
-             
-        CURSOR get_branch_manager IS 
-            SELECT Branch_Address
-            FROM AMA_BRANCH_TAB
-            WHERE Branch_Id = Branch_Id_;   
-    BEGIN
-        OPEN get_branch_manager;
-        FETCH get_branch_manager INTO result_;
-        CLOSE get_branch_manager;
-        
-        RETURN result_;
-        
-    END GET_BRANCH_MANAGER;
-    
-    --Get Total Warehouse Capacity
-    FUNCTION GET_TOTAL_WAREHOUSE_CAPACITY(Branch_Id_ IN NUMBER) RETURN NUMBER IS
-        result_ NUMBER;
-             
-        CURSOR get_capacity IS 
-            SELECT Total_Warehouse_Capacity
-            FROM AMA_BRANCH_TAB
-            WHERE Branch_Id = Branch_Id_;   
-    BEGIN
-        OPEN get_capacity;
-        FETCH get_capacity INTO result_;
-        CLOSE get_capacity;
-        
-        RETURN result_;
-        
-    END GET_TOTAL_WAREHOUSE_CAPACITY;
-    
-    --GET REMAINING CAPACITY
-    FUNCTION GET_REMAINING_CAPACITY(Branch_Id_  IN NUMBER) RETURN NUMBER IS
-             total_capacity_     NUMBER;
-             occupied_capacity_  NUMBER;
-             remaining_capacity_ NUMBER;
-             
-             CURSOR occupied_capacity_cursor IS
-                    SELECT SUM(Current_Volume)
-                    FROM AMA_CONTAINER_TAB
-                    WHERE Branch_Id = Branch_Id_;
-                    
-    BEGIN
-         -- Use existing function to get total capacity of the branch
-         total_capacity_ := GET_TOTAL_WAREHOUSE_CAPACITY(Branch_Id_);
-         
-         -- Declare a cursor to fetch the count of containers in the branch
-         OPEN occupied_capacity_cursor;
-         FETCH occupied_capacity_cursor INTO occupied_capacity_;
-         CLOSE occupied_capacity_cursor;
-         
-         -- Calculate remaining capacity
-         remaining_capacity_ := total_capacity_ - occupied_capacity_;
-         RETURN remaining_capacity_;
-         
-         EXCEPTION
-         WHEN NO_DATA_FOUND THEN RETURN NULL;
-         
-   END GET_REMAINING_CAPACITY;
-
-   -- To create record
-  PROCEDURE create_new_record(
-    Branch_Id_ IN NUMBER,
-    Branch_Name_ IN VARCHAR2,
-    Branch_Address_ IN VARCHAR2,
-    Branch_Manager_ IN VARCHAR2,
-    Total_Warehouse_Capacity_ IN NUMBER,
-    Company_Reg_No_ IN NUMBER,
-    Container_Id_ IN NUMBER
-  ) IS
+  PROCEDURE INSERT_BRANCH(Branch_Name_              IN VARCHAR2,
+                          Branch_Address_           IN VARCHAR2,
+                          Branch_Manager_           IN VARCHAR2,
+                          Total_Warehouse_capacity_ IN NUMBER,
+                          Company_Reg_No_           IN NUMBER,
+                          Container_Id_             IN NUMBER) IS
+    Branch_Id_ NUMBER;
   BEGIN
-    INSERT INTO AMA_BRANCH_TAB (
-      Branch_Id,
-      Branch_Name,
-      Branch_Address,
-      Branch_Manager,
-      Total_Warehouse_Capacity,
-      Company_Reg_No,
-      Container_Id
-    ) VALUES (
-      Branch_Id_,
-      Branch_Name_,
-      Branch_Address_,
-      Branch_Manager_,
-      Total_Warehouse_Capacity_,
-      Company_Reg_No_,
-      Container_Id_
-    );
-  END create_new_record;
+    SELECT BRANCH_SEQ.NEXTVAL INTO Branch_Id_ FROM DUAL;
+    INSERT INTO AMA_BRANCH_TAB
+      (Branch_Id,
+       Branch_Name,
+       Branch_Address,
+       Branch_Manager,
+       Total_Warehouse_capacity,
+       Company_Reg_No,
+       Container_Id)
+    VALUES
+      (Branch_Id_,
+       Branch_Name_,
+       Branch_Address_,
+       Branch_Manager_,
+       Total_Warehouse_capacity_,
+       Company_Reg_No_,
+       Container_Id_);
+  END INSERT_BRANCH;
+
+  --Get Branch Name
+  FUNCTION GET_BRANCH_NAME(Branch_Id_ IN NUMBER) RETURN VARCHAR2 IS
+    result_ VARCHAR2(200);
+  
+    CURSOR get_branch_name IS
+      SELECT Branch_Name FROM AMA_BRANCH_TAB WHERE Branch_Id = Branch_Id_;
+  BEGIN
+    OPEN get_branch_name;
+    FETCH get_branch_name
+      INTO result_;
+    CLOSE get_branch_name;
+  
+    RETURN result_;
+  
+  END GET_BRANCH_NAME;
+
+  --Get Branch address
+  FUNCTION GET_BRANCH_ADDRESS(Branch_Id_ IN NUMBER) RETURN VARCHAR2 IS
+    result_ VARCHAR2(4000);
+  
+    CURSOR get_branch_address IS
+      SELECT Branch_Address
+        FROM AMA_BRANCH_TAB
+       WHERE Branch_Id = Branch_Id_;
+  BEGIN
+    OPEN get_branch_address;
+    FETCH get_branch_address
+      INTO result_;
+    CLOSE get_branch_address;
+  
+    RETURN result_;
+  
+  END GET_BRANCH_ADDRESS;
+
+  --Get Branch Manager
+  FUNCTION GET_BRANCH_MANAGER(Branch_Id_ IN NUMBER) RETURN VARCHAR2 IS
+    result_ VARCHAR2(4000);
+  
+    CURSOR get_branch_manager IS
+      SELECT Branch_Address
+        FROM AMA_BRANCH_TAB
+       WHERE Branch_Id = Branch_Id_;
+  BEGIN
+    OPEN get_branch_manager;
+    FETCH get_branch_manager
+      INTO result_;
+    CLOSE get_branch_manager;
+  
+    RETURN result_;
+  
+  END GET_BRANCH_MANAGER;
+
+  --Get Total Warehouse Capacity
+  FUNCTION GET_TOTAL_WAREHOUSE_CAPACITY(Branch_Id_ IN NUMBER) RETURN NUMBER IS
+    result_ NUMBER;
+  
+    CURSOR get_capacity IS
+      SELECT Total_Warehouse_Capacity
+        FROM AMA_BRANCH_TAB
+       WHERE Branch_Id = Branch_Id_;
+  BEGIN
+    OPEN get_capacity;
+    FETCH get_capacity
+      INTO result_;
+    CLOSE get_capacity;
+  
+    RETURN result_;
+  
+  END GET_TOTAL_WAREHOUSE_CAPACITY;
+
+  --GET REMAINING CAPACITY
+  FUNCTION GET_REMAINING_CAPACITY(Branch_Id_ IN NUMBER) RETURN NUMBER IS
+    total_capacity_     NUMBER;
+    occupied_capacity_  NUMBER;
+    remaining_capacity_ NUMBER;
+  
+    CURSOR occupied_capacity_cursor IS
+      SELECT SUM(Current_Volume)
+        FROM AMA_CONTAINER_TAB
+       WHERE Branch_Id = Branch_Id_;
+  
+  BEGIN
+    -- Use existing function to get total capacity of the branch
+    total_capacity_ := GET_TOTAL_WAREHOUSE_CAPACITY(Branch_Id_);
+  
+    -- Declare a cursor to fetch the count of containers in the branch
+    OPEN occupied_capacity_cursor;
+    FETCH occupied_capacity_cursor
+      INTO occupied_capacity_;
+    CLOSE occupied_capacity_cursor;
+  
+    -- Calculate remaining capacity
+    remaining_capacity_ := total_capacity_ - occupied_capacity_;
+    RETURN remaining_capacity_;
+  
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      RETURN NULL;
+    
+  END GET_REMAINING_CAPACITY;
 
   -- To update record
-  PROCEDURE update_record(
-    Branch_Id_ IN NUMBER,
-    New_Branch_Name_ IN VARCHAR2,
-    New_Branch_Address_ IN VARCHAR2,
-    New_Branch_Manager_ IN VARCHAR2,
-    New_Total_Warehouse_Capacity_ IN NUMBER,
-    New_Company_Reg_No_ IN NUMBER,
-    New_Container_Id_ IN NUMBER
-  ) IS
+  PROCEDURE update_record(Branch_Id_                    IN NUMBER,
+                          New_Branch_Name_              IN VARCHAR2,
+                          New_Branch_Address_           IN VARCHAR2,
+                          New_Branch_Manager_           IN VARCHAR2,
+                          New_Total_Warehouse_Capacity_ IN NUMBER,
+                          New_Company_Reg_No_           IN NUMBER,
+                          New_Container_Id_             IN NUMBER) IS
   BEGIN
     UPDATE AMA_BRANCH_TAB
-    SET
-      Branch_Name = New_Branch_Name_,
-      Branch_Address = New_Branch_Address_,
-      Branch_Manager = New_Branch_Manager_,
-      Total_Warehouse_Capacity = New_Total_Warehouse_Capacity_,
-      Company_Reg_No = New_Company_Reg_No_,
-      Container_Id = New_Container_Id_
-    WHERE Branch_Id = Branch_Id_;
+       SET Branch_Name              = New_Branch_Name_,
+           Branch_Address           = New_Branch_Address_,
+           Branch_Manager           = New_Branch_Manager_,
+           Total_Warehouse_Capacity = New_Total_Warehouse_Capacity_,
+           Company_Reg_No           = New_Company_Reg_No_,
+           Container_Id             = New_Container_Id_
+     WHERE Branch_Id = Branch_Id_;
   END update_record;
 
   -- To delete record
@@ -184,6 +151,6 @@ CREATE OR REPLACE PACKAGE BODY AMA_BRANCH_API AS
   BEGIN
     DELETE FROM AMA_BRANCH_TAB WHERE Branch_Id = Branch_Id_;
   END delete_record;
-    
+
 END AMA_BRANCH_API;
 /
