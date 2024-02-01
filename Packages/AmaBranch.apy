@@ -126,6 +126,64 @@ CREATE OR REPLACE PACKAGE BODY AMA_BRANCH_API AS
          WHEN NO_DATA_FOUND THEN RETURN NULL;
          
    END GET_REMAINING_CAPACITY;
+
+   -- To create record
+  PROCEDURE create_new_record(
+    Branch_Id_ IN NUMBER,
+    Branch_Name_ IN VARCHAR2,
+    Branch_Address_ IN VARCHAR2,
+    Branch_Manager_ IN VARCHAR2,
+    Total_Warehouse_Capacity_ IN NUMBER,
+    Company_Reg_No_ IN NUMBER,
+    Container_Id_ IN NUMBER
+  ) IS
+  BEGIN
+    INSERT INTO AMA_BRANCH_TAB (
+      Branch_Id,
+      Branch_Name,
+      Branch_Address,
+      Branch_Manager,
+      Total_Warehouse_Capacity,
+      Company_Reg_No,
+      Container_Id
+    ) VALUES (
+      Branch_Id_,
+      Branch_Name_,
+      Branch_Address_,
+      Branch_Manager_,
+      Total_Warehouse_Capacity_,
+      Company_Reg_No_,
+      Container_Id_
+    );
+  END create_new_record;
+
+  -- To update record
+  PROCEDURE update_record(
+    Branch_Id_ IN NUMBER,
+    New_Branch_Name_ IN VARCHAR2,
+    New_Branch_Address_ IN VARCHAR2,
+    New_Branch_Manager_ IN VARCHAR2,
+    New_Total_Warehouse_Capacity_ IN NUMBER,
+    New_Company_Reg_No_ IN NUMBER,
+    New_Container_Id_ IN NUMBER
+  ) IS
+  BEGIN
+    UPDATE AMA_BRANCH_TAB
+    SET
+      Branch_Name = New_Branch_Name_,
+      Branch_Address = New_Branch_Address_,
+      Branch_Manager = New_Branch_Manager_,
+      Total_Warehouse_Capacity = New_Total_Warehouse_Capacity_,
+      Company_Reg_No = New_Company_Reg_No_,
+      Container_Id = New_Container_Id_
+    WHERE Branch_Id = Branch_Id_;
+  END update_record;
+
+  -- To delete record
+  PROCEDURE delete_record(Branch_Id_ IN NUMBER) IS
+  BEGIN
+    DELETE FROM AMA_BRANCH_TAB WHERE Branch_Id = Branch_Id_;
+  END delete_record;
     
 END AMA_BRANCH_API;
 /

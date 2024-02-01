@@ -95,6 +95,44 @@ CREATE OR REPLACE PACKAGE BODY AMA_ITEMS_API AS
         RETURN result_;
     END GET_RESERVED_QTY;
     
+    --CUD ops
+
+    -- To create item record
+  PROCEDURE create_new_item(
+    Item_Id_ IN VARCHAR2,
+    Item_Name_ IN VARCHAR2,
+    Available_Qty_KG_ IN FLOAT,
+    Scrapped_qty_KG_ IN FLOAT,
+    Reserved_Qty_KG_ IN FLOAT
+  ) IS
+  BEGIN
+    INSERT INTO AMA_ITEMS_TAB (Item_Id, Item_Name, Available_Qty_KG, Scrapped_qty_KG, Reserved_Qty_KG)
+    VALUES (Item_Id_, Item_Name_, Available_Qty_KG_, Scrapped_qty_KG_, Reserved_Qty_KG_);
+  END create_new_item;
+
+  -- To update item record
+  PROCEDURE update_item(
+    Item_Id_ IN VARCHAR2,
+    New_Item_Name_ IN VARCHAR2,
+    New_Available_Qty_KG_ IN FLOAT,
+    New_Scrapped_qty_KG_ IN FLOAT,
+    New_Reserved_Qty_KG_ IN FLOAT
+  ) IS
+  BEGIN
+    UPDATE AMA_ITEMS_TAB
+    SET Item_Name = New_Item_Name_,
+        Available_Qty_KG = New_Available_Qty_KG_,
+        Scrapped_qty_KG = New_Scrapped_qty_KG_,
+        Reserved_Qty_KG = New_Reserved_Qty_KG_
+    WHERE Item_Id = Item_Id_;
+  END update_item;
+
+  -- To delete item record
+  PROCEDURE delete_item(Item_Id_ IN VARCHAR2) IS
+  BEGIN
+    DELETE FROM AMA_ITEMS_TAB
+    WHERE Item_Id = Item_Id_;
+  END delete_item;
     
 END AMA_ITEMS_API;
 /

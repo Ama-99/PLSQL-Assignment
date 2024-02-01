@@ -58,6 +58,42 @@ CREATE OR REPLACE PACKAGE BODY AMA_COMPANY_API AS
                ', Company Name: ' || Company_Name_ ||
                ', Address: ' || Company_Address_;
     END GET_COMPANY_INFORMATION;
+
+    --CUD ops
+    
+    -- To create a new company record
+  PROCEDURE create_new_company(
+    company_reg_no_ IN NUMBER,
+    company_name_ IN VARCHAR2,
+    company_address_ IN VARCHAR2
+  ) IS
+  BEGIN
+    INSERT INTO AMA_COMPANY_TAB (Company_Reg_No, Company_Name, Company_Address)
+    VALUES (company_reg_no_, company_name_, company_address_);
+  END create_new_company;
+
+
+  -- To update a company record
+  PROCEDURE update_company(
+    company_reg_no_ IN NUMBER,
+    new_company_name_ IN VARCHAR2,
+    new_company_address_ IN VARCHAR2
+  ) IS
+  BEGIN
+    UPDATE AMA_COMPANY_TAB
+    SET Company_Name = new_company_name_,
+        Company_Address = new_company_address_
+    WHERE Company_Reg_No = company_reg_no_;
+  END update_company;
+
+
+  -- To delete a company record
+  PROCEDURE delete_company(company_reg_no_ IN NUMBER) IS
+  BEGIN
+    DELETE FROM AMA_COMPANY_TAB
+    WHERE Company_Reg_No = company_reg_no_;
+  END delete_company;
+
      
 END AMA_COMPANY_API;
 /

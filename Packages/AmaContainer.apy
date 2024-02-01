@@ -50,6 +50,62 @@ CREATE OR REPLACE PACKAGE BODY AMA_CONTAINER_API AS
         CLOSE get_max_weight;
         RETURN result_;
     END GET_MAX_WEIGHT;
+
+    PROCEDURE create_new_record(
+    Container_Id_ IN NUMBER,
+    Current_Weight_ IN NUMBER,
+    Max_Volume_ IN FLOAT,
+    Max_Weight_ IN FLOAT,
+    Current_Volume_ IN FLOAT,
+    Branch_Id_ IN NUMBER,
+    Company_Reg_No_ IN NUMBER
+  ) IS
+  BEGIN
+    INSERT INTO AMA_CONTAINER_TAB (
+      Container_Id,
+      Current_Weight,
+      Max_Volume,
+      Max_Weight,
+      Current_Volume,
+      Branch_Id,
+      Company_Reg_No
+    )
+    VALUES (
+      Container_Id_,
+      Current_Weight_,
+      Max_Volume_,
+      Max_Weight_,
+      Current_Volume_,
+      Branch_Id_,
+      Company_Reg_No_
+    );
+  END create_new_record;
+
+  PROCEDURE update_record(
+    Container_Id_ IN NUMBER,
+    Current_Weight_ IN NUMBER,
+    Max_Volume_ IN FLOAT,
+    Max_Weight_ IN FLOAT,
+    Current_Volume_ IN FLOAT,
+    Branch_Id_ IN NUMBER,
+    Company_Reg_No_ IN NUMBER
+  ) IS
+  BEGIN
+    UPDATE AMA_CONTAINER_TAB
+    SET
+      Current_Weight = Current_Weight_,
+      Max_Volume = Max_Volume_,
+      Max_Weight = Max_Weight_,
+      Current_Volume = Current_Volume_,
+      Branch_Id = Branch_Id_,
+      Company_Reg_No = Company_Reg_No_
+    WHERE Container_Id = Container_Id_;
+  END update_record;
+
+  PROCEDURE delete_record(Container_Id_ IN NUMBER) IS
+  BEGIN
+    DELETE FROM AMA_CONTAINER_TAB WHERE Container_Id = Container_Id_;
+  END delete_record;
     
     
 END AMA_CONTAINER_API;

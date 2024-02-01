@@ -5,5 +5,27 @@ CREATE OR REPLACE PACKAGE AMA_STORAGE_API AS
       Item_Id_ IN VARCHAR2,
       Status_ IN VARCHAR2
    );
+
+   --CUD ops
+
+
+   PROCEDURE create_new_record(
+    Storage_Id_ IN VARCHAR2,
+    Item_Id_ IN VARCHAR2,
+    Container_Id_ IN NUMBER,
+    Branch_Id_ IN NUMBER,
+    Status_ IN VARCHAR2
+  );
+
+  PROCEDURE update_record(
+    Storage_Id_ IN VARCHAR2,
+    New_Item_Id_ IN VARCHAR2,
+    New_Container_Id_ IN NUMBER,
+    New_Branch_Id_ IN NUMBER,
+    New_Status_ IN VARCHAR2
+  );
+
+  PROCEDURE delete_record(Storage_Id_ IN VARCHAR2);
+
 END AMA_STORAGE_API;
 /
