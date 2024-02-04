@@ -1,0 +1,5 @@
+CREATE OR REPLACE VIEW AMA_BRANCH_CAPACITY_INFO AS
+SELECT b.Branch_Id,
+       AMA_BRANCH_API.GET_BRANCH_NAME(b.Branch_Id) AS Branch_Name,
+       b.Total_Warehouse_Capacity AS Branch_Capacity
+FROM AMA_BRANCH_TAB b;

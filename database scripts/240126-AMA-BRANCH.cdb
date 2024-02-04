@@ -5,8 +5,7 @@ CREATE TABLE AMA_BRANCH_TAB (
     Branch_Manager VARCHAR2(200),
     Total_Warehouse_capacity NUMBER,
     Company_Reg_No NUMBER,
-    Container_Id NUMBER,
-    PRIMARY KEY (Company_Reg_No, Branch_Id,Container_Id)
+    PRIMARY KEY (Company_Reg_No, Branch_Id)
 );
 
 CREATE SEQUENCE BRANCH_SEQ

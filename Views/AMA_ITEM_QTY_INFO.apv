@@ -1,0 +1,17 @@
+CREATE OR REPLACE VIEW AMA_ITEM_QTY_VIEW AS
+SELECT 
+    b.branch_id,
+    b.branch_name,
+    i.item_id,
+    i.item_name,
+    i.available_qty_kg ,
+	  i.scrapped_qty_kg ,
+	  i.reserved_qty_kg 
+FROM 
+    AMA_BRANCH_TAB b
+JOIN 
+    AMA_CONTAINER_TAB c ON b.Branch_Id = c.Branch_Id
+JOIN 
+    AMA_STORAGE_TAB s ON c.Container_Id = s.Container_Id
+JOIN
+	  AMA_ITEMS_TAB i ON s.Item_Id = i.Item_Id;
